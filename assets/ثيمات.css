@@ -1,0 +1,320 @@
+/* =========================================================
+   نظام الثيمات — تبديل الألوان والمظهر
+   يُحفظ الاختيار في localStorage
+   ملاحظة: هذه القواعد تُحمَّل بعد :root العام، وتزيد الأولوية
+   عبر data-theme على <html> لتجاوز القيم الافتراضية.
+   ========================================================= */
+
+/* قمّة الأولوية: أي ثيم مُختار يتجاوز :root الافتراضي */
+html[data-theme], body[data-theme] { }
+
+/* ============ الثيم الداكن (الافتراضي) ============ */
+:root[data-theme="dark"], html[data-theme="dark"], [data-theme="dark"] {
+  --bg-deep: #050b1a;
+  --bg-panel: #0b1733;
+  --bg-panel-2: #0e1e42;
+  --bg-elevated: #122449;
+  --bg-input: #0a1428;
+  --border: #1b2c52;
+  --border-bright: #2a4a85;
+  --text: #e8f0ff;
+  --text-strong: #f4f8ff;
+  --text-muted: #94a8cc;
+  --text-dim: #6b84ad;
+  --glass: rgba(18, 36, 73, 0.55);
+  --glass-strong: rgba(14, 30, 66, 0.78);
+  --glass-border: rgba(42, 74, 133, 0.55);
+  --card-shadow: 0 10px 34px rgba(0, 0, 0, 0.5);
+}
+
+/* ============ الثيم الفاتح (نهاري) ============ */
+[data-theme="light"] {
+  --bg-deep: #eef3fb;
+  --bg-panel: #ffffff;
+  --bg-panel-2: #f5f8fd;
+  --bg-elevated: #e6edf9;
+  --bg-input: #f0f4fa;
+  --border: #d3dff0;
+  --border-bright: #a9c0e2;
+  --text: #16233d;
+  --text-strong: #050d1f;
+  --text-muted: #4c6180;
+  --text-dim: #7488a6;
+  --glass: rgba(255, 255, 255, 0.85);
+  --glass-strong: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(180, 200, 230, 0.8);
+  --card-shadow: 0 10px 30px rgba(30, 60, 120, 0.1);
+
+  --cyan: #0891b2;
+  --cyan-soft: #0e7490;
+  --blue: #2563eb;
+  --blue-bright: #3b82f6;
+  --blue-deep: #1d4ed8;
+  --violet: #7c3aed;
+  --teal: #0d9488;
+  --amber: #d97706;
+  --danger: #dc2626;
+  --danger-soft: #ef4444;
+  --ok: #16a34a;
+  --warn: #d97706;
+
+  --glow-cyan: 0 0 18px rgba(8, 145, 178, 0.22);
+  --glow-blue: 0 0 18px rgba(37, 99, 235, 0.18);
+}
+
+/* خلفية فاتحة: خفّف التأثيرات المضيئة */
+[data-theme="light"] .bg-aurora span { opacity: 0.22; }
+[data-theme="light"] .bg-grid { opacity: 0.4; }
+[data-theme="light"] .bg-scan { display: none; }
+[data-theme="light"] .bg-particles { display: none; }
+[data-theme="light"] .topbar {
+  background: rgba(255, 255, 255, 0.88);
+  border-bottom-color: var(--border);
+}
+[data-theme="light"] .sidebar { background: rgba(255, 255, 255, 0.6); }
+[data-theme="light"] .card { box-shadow: var(--card-shadow); }
+[data-theme="light"] .kpi-value { text-shadow: none !important; }
+[data-theme="light"] .page-head h1 { -webkit-text-fill-color: var(--text-strong); }
+[data-theme="light"] .jvm-region.jvm-element { fill: #c8d8ee; stroke: #a3b8d8; }
+[data-theme="light"] .jvm-region.jvm-element:hover { fill: #9fbde8; }
+[data-theme="light"] .jvm-tooltip {
+  background: #fff !important;
+  color: #16233d !important;
+  border-color: #c3d3ea !important;
+}
+
+/* ============ الثيم البنفسجي ============ */
+[data-theme="violet"] {
+  --bg-deep: #0d0518;
+  --bg-panel: #1a0d33;
+  --bg-panel-2: #22123f;
+  --bg-elevated: #2a1650;
+  --bg-input: #150a2b;
+  --border: #35195e;
+  --border-bright: #4a2385;
+  --text: #ece4fb;
+  --text-strong: #f8f4ff;
+  --text-muted: #a795c8;
+  --text-dim: #7b68a0;
+  --glass: rgba(34, 18, 63, 0.6);
+  --glass-strong: rgba(26, 13, 51, 0.82);
+  --glass-border: rgba(74, 35, 133, 0.6);
+
+  --cyan: #c084fc;
+  --cyan-soft: #d8b4fe;
+  --blue: #a855f7;
+  --blue-bright: #c084fc;
+  --blue-deep: #7c3aed;
+  --teal: #22d3ee;
+  --glow-cyan: 0 0 22px rgba(192, 132, 252, 0.35);
+}
+
+/* ============ الثيم الأخضر (مصفوفة) ============ */
+[data-theme="matrix"] {
+  --bg-deep: #030a05;
+  --bg-panel: #06170c;
+  --bg-panel-2: #08200f;
+  --bg-elevated: #0b2a15;
+  --bg-input: #04120a;
+  --border: #123f22;
+  --border-bright: #1c5c31;
+  --text: #d6f5df;
+  --text-strong: #eafcf0;
+  --text-muted: #83b895;
+  --text-dim: #57916c;
+  --glass: rgba(6, 23, 12, 0.65);
+  --glass-strong: rgba(8, 32, 15, 0.85);
+  --glass-border: rgba(28, 92, 49, 0.6);
+
+  --cyan: #4ade80;
+  --cyan-soft: #86efac;
+  --blue: #22c55e;
+  --blue-bright: #4ade80;
+  --blue-deep: #15803d;
+  --violet: #a3e635;
+  --teal: #2dd4bf;
+  --ok: #4ade80;
+  --glow-cyan: 0 0 22px rgba(74, 222, 128, 0.32);
+}
+
+[data-theme="matrix"] .bg-aurora span { background: radial-gradient(circle, rgba(74, 222, 128, 0.3), transparent 70%); }
+[data-theme="matrix"] .bg-grid {
+  background-image:
+    linear-gradient(rgba(74, 222, 128, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74, 222, 128, 0.05) 1px, transparent 1px);
+}
+
+/* ============ الثيم العنابي ============ */
+[data-theme="crimson"] {
+  --bg-deep: #0f0407;
+  --bg-panel: #210a0f;
+  --bg-panel-2: #2a0e15;
+  --bg-elevated: #35131c;
+  --bg-input: #18060b;
+  --border: #4a1524;
+  --border-bright: #6b1f33;
+  --text: #fbe4e8;
+  --text-strong: #fff2f4;
+  --text-muted: #c08d99;
+  --text-dim: #99636f;
+  --glass: rgba(33, 10, 15, 0.6);
+  --glass-strong: rgba(42, 14, 21, 0.82);
+  --glass-border: rgba(107, 31, 51, 0.6);
+
+  --cyan: #fb7185;
+  --cyan-soft: #fda4af;
+  --blue: #f43f5e;
+  --blue-bright: #fb7185;
+  --blue-deep: #be123c;
+  --violet: #f472b6;
+  --teal: #fb923c;
+  --ok: #4ade80;
+  --glow-cyan: 0 0 22px rgba(251, 113, 133, 0.32);
+}
+
+/* =========================================================
+   لوحة اختيار الثيم
+   ========================================================= */
+.theme-switcher {
+  position: fixed;
+  bottom: 22px;
+  inset-inline-end: 22px;
+  z-index: 250;
+}
+
+.theme-fab {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-strong);
+  backdrop-filter: blur(14px);
+  color: var(--cyan);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow-lg), 0 0 24px rgba(34, 211, 238, 0.18);
+  transition: all 0.32s var(--ease-spring);
+}
+
+.theme-fab svg { width: 24px; height: 24px; }
+
+.theme-fab:hover {
+  transform: scale(1.12) rotate(20deg);
+  box-shadow: var(--shadow-lg), 0 0 34px rgba(34, 211, 238, 0.35);
+}
+
+.theme-panel {
+  position: absolute;
+  bottom: 66px;
+  inset-inline-end: 0;
+  width: 232px;
+  background: var(--glass-strong);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(14px) scale(0.94);
+  pointer-events: none;
+  transition: all 0.32s var(--ease-out);
+}
+
+.theme-panel.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.theme-panel-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-strong);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.theme-panel-title svg { width: 15px; height: 15px; color: var(--cyan); }
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+}
+
+.theme-opt {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.26s var(--ease-out);
+  padding: 0;
+}
+
+.theme-opt:hover { transform: scale(1.08); border-color: var(--cyan); }
+
+.theme-opt.active {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2);
+}
+
+.theme-opt span {
+  position: absolute;
+  inset: auto 0 0 0;
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-align: center;
+  padding: 3px 2px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+}
+
+/* معاينات الألوان */
+.theme-opt[data-t="dark"]    { background: linear-gradient(145deg, #0b1733, #1e40af); }
+.theme-opt[data-t="light"]   { background: linear-gradient(145deg, #ffffff, #c7d9f2); }
+.theme-opt[data-t="violet"]  { background: linear-gradient(145deg, #1a0d33, #7c3aed); }
+.theme-opt[data-t="matrix"]  { background: linear-gradient(145deg, #06170c, #22c55e); }
+.theme-opt[data-t="crimson"] { background: linear-gradient(145deg, #210a0f, #be123c); }
+.theme-opt[data-t="ocean"]   { background: linear-gradient(145deg, #03202b, #0e7490); }
+
+/* ============ ثيم المحيط ============ */
+[data-theme="ocean"] {
+  --bg-deep: #02141c;
+  --bg-panel: #062a38;
+  --bg-panel-2: #083648;
+  --bg-elevated: #0a4256;
+  --bg-input: #041f2a;
+  --border: #0f4a5e;
+  --border-bright: #166a84;
+  --text: #d9f2fa;
+  --text-strong: #effaff;
+  --text-muted: #86b8c9;
+  --text-dim: #5b8ea1;
+  --glass: rgba(6, 42, 56, 0.62);
+  --glass-strong: rgba(8, 54, 72, 0.84);
+  --glass-border: rgba(22, 106, 132, 0.6);
+  --cyan: #22d3ee;
+  --cyan-soft: #67e8f9;
+  --blue: #06b6d4;
+  --blue-bright: #22d3ee;
+  --blue-deep: #0e7490;
+  --teal: #2dd4bf;
+  --glow-cyan: 0 0 22px rgba(34, 211, 238, 0.3);
+}
+
+/* ============ انتقال ناعم بين الثيمات ============ */
+body, .card, .kpi, .topbar, .sidebar, .footer, .panel-card,
+.update-bar, .se-case, .se-intro, .se-principle, .quiz-card {
+  transition: background-color 0.5s ease, border-color 0.5s ease, color 0.4s ease;
+}
+
+@media (max-width: 768px) {
+  .theme-switcher { bottom: 14px; inset-inline-end: 14px; }
+  .theme-fab { width: 48px; height: 48px; }
+  .theme-panel { width: 208px; }
+}

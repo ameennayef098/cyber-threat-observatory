@@ -1,0 +1,594 @@
+/* =========================================================
+   مكبّر الصور (Lightbox)
+   ========================================================= */
+.zoom-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+}
+
+.zoom-lightbox.hidden { display: none; }
+
+.zoom-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 8, 20, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: zoomFade 0.25s ease;
+}
+
+@keyframes zoomFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.zoom-frame {
+  position: relative;
+  width: 75vw;
+  height: 75vh;
+  max-width: 75vw;
+  max-height: 75vh;
+  display: grid;
+  place-items: center;
+  animation: zoomPop 0.3s var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+}
+
+@keyframes zoomPop {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.zoom-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 14px;
+  border: 1px solid var(--border-bright);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  background: var(--bg-panel);
+  cursor: zoom-out;
+}
+
+.zoom-close {
+  position: absolute;
+  top: -14px;
+  inset-inline-end: -14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border-bright);
+  background: var(--bg-panel);
+  color: var(--text);
+  font-size: 1.15rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow);
+}
+
+.zoom-close:hover {
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+  transform: rotate(90deg);
+}
+
+.zoom-hint {
+  position: absolute;
+  bottom: -34px;
+  inset-inline: 0;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+/* زر التكبير فوق صور دراسات الحالة */
+.se-zoom-btn {
+  position: absolute;
+  bottom: 10px;
+  inset-inline-end: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border, var(--border-bright));
+  background: rgba(6, 13, 31, 0.75);
+  backdrop-filter: blur(8px);
+  color: var(--cyan);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: translateY(6px);
+  z-index: 2;
+}
+
+.se-case-img:hover .se-zoom-btn,
+.se-ch-img:hover .se-zoom-btn,
+.se-zoom-btn:focus-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.se-zoom-btn:hover {
+  background: rgba(34, 211, 238, 0.2);
+  border-color: var(--cyan);
+}
+
+.se-zoom-btn svg { width: 17px; height: 17px; }
+
+.se-case-img img, .se-ch-img img { cursor: zoom-in; }
+
+@media (max-width: 768px) {
+  .zoom-frame { width: 92vw; height: 70vh; max-width: 92vw; max-height: 70vh; }
+  .se-zoom-btn { opacity: 1; transform: none; width: 32px; height: 32px; }
+  .se-zoom-btn svg { width: 15px; height: 15px; }
+}
+
+/* =========================================================
+   قسم «جرّب بنفسك» — أدوات تفاعلية
+   ========================================================= */
+
+/* ---------- التبويبات ---------- */
+.try-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-bottom: 20px;
+}
+
+.try-tabs .chip {
+  min-height: 44px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+}
+
+.try-card {
+  padding: 24px;
+}
+
+.try-card .card-title {
+  font-size: 1.15rem;
+  margin-bottom: 8px;
+}
+
+.try-card .card-desc {
+  margin-bottom: 20px;
+  line-height: 1.9;
+}
+
+.try-card .card-title span svg,
+.try-card .card-title svg {
+  width: 18px;
+  height: 18px;
+  vertical-align: -3px;
+  margin-inline-end: 4px;
+  color: var(--cyan);
+}
+
+/* ---------- حقل الإدخال ---------- */
+.try-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  margin-bottom: 14px;
+}
+
+.try-input {
+  flex: 1;
+  min-width: 0;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-bright);
+  background: var(--bg-input);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.try-input:focus {
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+}
+
+.try-input::placeholder {
+  color: var(--text-dim);
+  font-family: inherit;
+}
+
+.try-input-row .btn {
+  flex-shrink: 0;
+  min-height: 50px;
+  padding: 0 24px;
+}
+
+/* ---------- أمثلة جاهزة ---------- */
+.try-samples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.try-samples-label {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+
+.try-samples .chip {
+  min-height: 36px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  direction: ltr;
+}
+
+/* ---------- نتيجة فحص الرابط ---------- */
+.try-result {
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  animation: cardEnter 0.4s var(--ease-out);
+}
+
+.try-result-ok { border-color: rgba(34, 197, 94, 0.4); }
+.try-result-warn { border-color: rgba(245, 158, 11, 0.45); }
+.try-result-danger { border-color: rgba(239, 68, 68, 0.5); }
+
+.try-verdict {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+}
+
+.try-verdict > svg {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.try-result-ok .try-verdict { background: rgba(34, 197, 94, 0.08); }
+.try-result-ok .try-verdict > svg { color: var(--ok); }
+.try-result-warn .try-verdict { background: rgba(245, 158, 11, 0.08); }
+.try-result-warn .try-verdict > svg { color: var(--warn); }
+.try-result-danger .try-verdict { background: rgba(239, 68, 68, 0.08); }
+.try-result-danger .try-verdict > svg { color: var(--danger); }
+
+.try-verdict-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-strong);
+}
+
+.try-verdict-url {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  word-break: break-all;
+  margin-top: 2px;
+}
+
+.try-score {
+  margin-inline-start: auto;
+  font-size: 2rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.try-score small {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.try-score-ok { color: var(--ok); }
+.try-score-warn { color: var(--warn); }
+.try-score-danger { color: var(--danger); }
+
+.try-findings {
+  border-top: 1px solid var(--border);
+}
+
+.try-finding {
+  display: flex;
+  gap: 12px;
+  padding: 14px 20px;
+  align-items: flex-start;
+}
+
+.try-finding + .try-finding {
+  border-top: 1px solid var(--border);
+}
+
+.try-finding-ico {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  margin-top: 2px;
+}
+
+.try-finding-ico svg { width: 15px; height: 15px; }
+
+.try-finding-danger .try-finding-ico { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+.try-finding-warn .try-finding-ico { background: rgba(245, 158, 11, 0.15); color: var(--warn); }
+.try-finding-ok .try-finding-ico { background: rgba(34, 197, 94, 0.15); color: var(--ok); }
+.try-finding-info .try-finding-ico { background: rgba(34, 211, 238, 0.15); color: var(--cyan); }
+
+.try-finding b {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--text-strong);
+  margin-bottom: 3px;
+}
+
+.try-finding p {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+/* ---------- مقياس قوة كلمة المرور ---------- */
+.pass-meter-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.pass-meter {
+  flex: 1;
+  height: 12px;
+  border-radius: 100px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.pass-meter-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 100px;
+  transition: width 0.4s var(--ease-out), background 0.3s ease;
+}
+
+.pass-meter-weak { background: linear-gradient(90deg, #ef4444, #f87171); }
+.pass-meter-fair { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.pass-meter-good { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+.pass-meter-strong { background: linear-gradient(90deg, #22c55e, #4ade80); box-shadow: 0 0 12px rgba(34, 197, 94, 0.4); }
+
+.pass-meter-label {
+  font-size: 1rem;
+  font-weight: 800;
+  min-width: 90px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* ---------- قواعد كلمة المرور ---------- */
+.pass-rules {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.pass-rule {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 10px 13px;
+  border-radius: 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  transition: all 0.25s ease;
+}
+
+.pass-rule-ico {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  margin-top: 1px;
+  font-weight: 800;
+}
+
+.pass-rule-ico svg { width: 13px; height: 13px; }
+
+.pass-rule.ok {
+  border-color: rgba(34, 197, 94, 0.3);
+  background: rgba(34, 197, 94, 0.06);
+  color: var(--text);
+}
+
+.pass-rule.ok .pass-rule-ico { background: rgba(34, 197, 94, 0.15); color: var(--ok); }
+
+.pass-rule.no .pass-rule-ico { background: rgba(239, 68, 68, 0.12); color: var(--danger); }
+
+.pass-estimate {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 16px;
+  border-radius: 10px;
+  background: rgba(34, 211, 238, 0.06);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.pass-estimate > svg {
+  width: 18px;
+  height: 18px;
+  color: var(--cyan);
+  flex-shrink: 0;
+}
+
+.pass-estimate small {
+  color: var(--text-dim);
+  font-size: 0.76rem;
+}
+
+/* ---------- أداة أخطر التهديدات ---------- */
+.who-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.who-choices .chip {
+  min-height: 44px;
+  padding: 10px 18px;
+}
+
+.who-summary {
+  padding: 18px 20px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(165deg, rgba(34, 211, 238, 0.08), var(--bg-panel));
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  margin-bottom: 16px;
+}
+
+.who-summary h3 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 1.05rem;
+  color: var(--text-strong);
+  margin-bottom: 8px;
+}
+
+.who-summary h3 svg {
+  width: 20px;
+  height: 20px;
+  color: var(--cyan);
+  flex-shrink: 0;
+}
+
+.who-summary p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.9;
+}
+
+.who-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.who-item {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 16px;
+  border-radius: 11px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.25s var(--ease-out);
+  cursor: pointer;
+}
+
+.who-item:hover {
+  border-color: var(--cyan);
+  transform: translateX(-4px);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.1);
+}
+
+.who-item-top {
+  border-inline-start: 3px solid var(--cyan);
+}
+
+.who-rank {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-bright);
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.who-item-top .who-rank {
+  background: rgba(34, 211, 238, 0.12);
+  border-color: rgba(34, 211, 238, 0.3);
+  color: var(--cyan);
+}
+
+.who-ico svg {
+  width: 20px;
+  height: 20px;
+  color: var(--cyan);
+}
+
+.who-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.who-cat {
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  margin-inline-start: auto;
+}
+
+.who-badge {
+  padding: 4px 11px;
+  border-radius: 100px;
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  color: var(--cyan);
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* ---------- التجاوب ---------- */
+@media (max-width: 768px) {
+  .try-card { padding: 18px; }
+  .try-input-row { flex-direction: column; }
+  .try-input-row .btn { width: 100%; }
+  .try-verdict { flex-wrap: wrap; }
+  .try-score { margin-inline-start: 0; font-size: 1.6rem; }
+  .pass-rules { grid-template-columns: 1fr; }
+  .who-item { flex-wrap: wrap; }
+  .who-cat { margin-inline-start: 0; width: 100%; }
+  .try-samples .chip { font-size: 0.72rem; padding: 6px 10px; }
+  .try-samples-label { width: 100%; }
+}
+
+/* منع أي تجاوز أفقي داخل القسم على الشاشات الصغيرة */
+#section-try, #section-try * { max-width: 100%; }
+.try-input { width: 100%; }
+.try-verdict-url { overflow-wrap: anywhere; word-break: break-all; }
+.try-samples { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+@media (min-width: 769px) {
+  .try-samples { flex-wrap: wrap; overflow-x: visible; }
+}

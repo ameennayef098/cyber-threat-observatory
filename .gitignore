@@ -1,0 +1,16 @@
+# Python scripts (QA helpers, لا تكمن في الموقع)
+*.py
+__pycache__/
+
+# QA screenshots
+لقطات/
+صور/
+
+# Backups / temporaries
+*.bak
+*.backup-*
+server.py
+
+# OS / editor
+.DS_Store
+Thumbs.db

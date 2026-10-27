@@ -1,0 +1,39 @@
+/* =========================================================
+   مرصد التهديدات السيبرانية — طبقة الخطوط العربية
+   خط عربي واضح ومناسب للعرض أمام الجمهور
+   ========================================================= */
+
+@font-face {
+  font-family: 'ArabicUI';
+  src: local('Noto Kufi Arabic'),
+       local('Cairo'),
+       local('Tajawal'),
+       local('Segoe UI');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ArabicMono';
+  src: local('Consolas'), local('Courier New');
+  font-display: swap;
+}
+
+:root {
+  --font-arabic: 'ArabicUI', 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+  --font-mono: 'ArabicMono', 'Consolas', 'Courier New', monospace;
+}
+
+body, input, button, textarea, select {
+  font-family: var(--font-arabic);
+}
+
+/* الأرقام تبقى لاتينية للوضوح في الرسوم البيانية */
+.num, .stat-value, .chart-value, kpi-value {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+/* نص الزر مخفي على الشاشات الصغيرة */
+@media (max-width: 768px) {
+  .hide-sm { display: none !important; }
+}

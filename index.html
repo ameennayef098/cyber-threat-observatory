@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مرصد التهديدات السيبرانية — منصة توعية تفاعلية</title>
+<meta name="description" content="منصة توعوية تفاعلية عن التهديدات السيبرانية: مؤشرات وإحصائيات موثقة، خريطة تعليمية، مكتبة تهديدات، مختبر تصيد تفاعلي، واختبارات توعوية.">
+
+<link rel="stylesheet" href="assets/jsvectormap.min.css">
+<link rel="stylesheet" href="assets/تنسيقات.css">
+<link rel="stylesheet" href="assets/تنسيقات-جرب.css">
+<link rel="stylesheet" href="assets/تنسيقات-اركان.css">
+<link rel="stylesheet" href="assets/تنسيقات-أسطورية.css">
+<link rel="stylesheet" href="assets/تنسيقات-هندسة.css">
+<link rel="stylesheet" href="assets/ثيمات.css">
+<link rel="stylesheet" href="assets/خط-عربي.css">
+<link rel="stylesheet" href="game.css">
+</head>
+<body>
+
+<!-- ============ طبقات الخلفية الحية ============ -->
+<div class="bg-aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-scan" aria-hidden="true"></div>
+<div class="bg-particles" id="bgParticles" aria-hidden="true"></div>
+
+<!-- ============ الشريط العلوي ============ -->
+<header class="topbar">
+  <a href="#" class="brand" data-home>
+    <div class="brand-logo" id="brandLogo"></div>
+    <div class="brand-text">
+      <span class="brand-title">مرصد التهديدات السيبرانية</span>
+      <span class="brand-sub">منصة توعية تفاعلية — المملكة العربية السعودية</span>
+    </div>
+  </a>
+
+  <button class="nav-toggle" id="navToggle" aria-label="القائمة" aria-expanded="false"></button>
+
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+
+  <!-- ملاحظة: روابط التنقل العلوية مخفية على الديسكتوب — تظهر كقائمة منسدلة على الموبايل -->
+  <nav class="nav-links" id="navLinks">
+    <a href="#dashboard" class="nav-link active" data-section="dashboard">لوحة المعلومات</a>
+    <a href="#map" class="nav-link" data-section="map">خرائط التهديدات</a>
+    <a href="#stats" class="nav-link" data-section="stats">الإحصائيات</a>
+    <a href="#library" class="nav-link" data-section="library">مكتبة التهديدات</a>
+    <a href="#lab" class="nav-link" data-section="lab">مختبر التصيد</a>
+    <a href="#osint" class="nav-link" data-section="osint">الهندسة الاجتماعية OSINT</a>
+    <a href="#quiz" class="nav-link" data-section="quiz">الاختبارات</a>
+    <a href="#awareness" class="nav-link" data-section="awareness">التوعية</a>
+    <a href="#try" class="nav-link" data-section="try">جرّب بنفسك</a>
+    <a href="#ai" class="nav-link" data-section="ai">اركان AI</a>
+    <a href="#sources" class="nav-link" data-section="sources">المصادر</a>
+  </nav>
+
+  <div class="topbar-actions">
+    <button class="btn-icon" id="btnPresent" title="وضع العرض التقديمي"></button>
+    <button class="btn-icon" id="btnReset" title="إعادة ضبط العرض"></button>
+  </div>
+</header>
+
+<!-- ============ التخطيط ============ -->
+<div class="layout">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-group">
+      <span class="sidebar-label">أقسام المرصد</span>
+      <a href="#dashboard" class="side-link active" data-section="dashboard"></a>
+      <a href="#map" class="side-link" data-section="map"></a>
+      <a href="#stats" class="side-link" data-section="stats"></a>
+      <a href="#library" class="side-link" data-section="library"></a>
+      <a href="#lab" class="side-link" data-section="lab"></a>
+      <a href="#quiz" class="side-link" data-section="quiz"></a>
+      <a href="#awareness" class="side-link" data-section="awareness"></a>
+      <a href="#try" class="side-link" data-section="try"></a>
+      <a href="#ai" class="side-link" data-section="ai"></a>
+      <a href="#about" class="side-link" data-section="about"></a>
+      <a href="#sources" class="side-link" data-section="sources"></a>
+    </div>
+
+    <div class="sidebar-note" id="sidebarNote"></div>
+  </aside>
+
+  <main class="content">
+
+    <!-- ==================== 1. لوحة المعلومات ==================== -->
+    <section class="section active" id="section-dashboard">
+      <div class="page-head">
+        <h1><span id="brandLogo2"></span> لوحة المعلومات الرئيسية</h1>
+        <p>مؤشرات مختارة عن مشهد التهديدات السيبرانية، مبنية على تقارير منشورة ومصادرها مذكورة بوضوح بجانب كل رقم. لا توجد مراقبة مباشرة للهجمات في هذه المنصة.</p>
+      </div>
+
+      <div class="update-bar" id="dashUpdateBar"></div>
+
+      <div class="kpi-grid" id="kpiGrid"></div>
+
+      <div class="chart-grid">
+        <div class="card chart-box">
+          <div class="card-title" id="chartThreatTitle"></div>
+          <div class="card-desc" id="chartThreatDesc"></div>
+          <div class="chart-canvas-wrap"><canvas id="chartThreats"></canvas></div>
+          <div class="chart-legend" id="chartThreatLegend"></div>
+        </div>
+
+        <div class="card chart-box">
+          <div class="card-title" id="chartPhishTitle"></div>
+          <div class="card-desc" id="chartPhishDesc"></div>
+          <div class="chart-canvas-wrap"><canvas id="chartPhishing"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card chart-box">
+        <div class="card-title" id="chartRansomTitle"></div>
+        <div class="card-desc" id="chartRansomDesc"></div>
+        <div class="chart-canvas-wrap short"><canvas id="chartRansom"></canvas></div>
+      </div>
+    </section>
+
+    <!-- ==================== 2. الخريطة ==================== -->
+    <section class="section" id="section-map">
+      <div class="page-head">
+        <h1><span id="mapTitleIcon"></span> خريطة الهجمات السيبرانية العالمية <span class="tag tag-real">بيانات حقيقية</span></h1>
+        <p>توزيع فعلي لخوادم القيادة والسيطرة (C2) النشطة حول العالم، مأخوذ من قاعدة <b>abuse.ch ThreatFox</b> المفتوحة. اضغط على أي دولة لعرض تفاصيلها.</p>
+      </div>
+
+      <div class="update-bar" id="mapUpdateBar"></div>
+
+      <div class="map-layout">
+        <!-- الخريطة (يمين) -->
+        <div class="card map-card">
+          <div class="map-head">
+            <div class="card-title" id="mapHeadTitle"></div>
+            <div class="spacer"></div>
+            <span class="tag tag-real" id="mapRealTag"></span>
+          </div>
+          <div id="map"></div>
+          <div class="map-legend" id="mapLegend"></div>
+          <div class="map-notice" id="mapNotice"></div>
+        </div>
+
+        <!-- لوحة المعلومات (يسار) -->
+        <aside class="map-panel" id="mapPanel"></aside>
+      </div>
+    </section>
+
+    <!-- ==================== 3. الإحصائيات ==================== -->
+    <section class="section" id="section-stats">
+      <div class="page-head">
+        <h1><span id="statsTitleIcon"></span> الإحصائيات الموثقة</h1>
+        <p>رسوم بيانية مبنية على تقارير منشورة. <b>المصدر والفترة الزمنية مذكورة بجانب كل رسم.</b> لا توجد أرقام مختلقة.</p>
+      </div>
+
+      <div class="update-bar" id="statsUpdateBar"></div>
+
+      <div class="chart-grid">
+        <div class="card chart-box">
+          <div class="card-title" id="stSectorTitle"></div>
+          <div class="card-desc" id="stSectorDesc"></div>
+          <div class="chart-canvas-wrap tall"><canvas id="chartSectors"></canvas></div>
+        </div>
+        <div class="card chart-box">
+          <div class="card-title" id="stRansomTrendTitle"></div>
+          <div class="card-desc" id="stRansomTrendDesc"></div>
+          <div class="chart-canvas-wrap tall"><canvas id="chartRansomTrend"></canvas></div>
+        </div>
+      </div>
+
+      <div class="chart-grid">
+        <div class="card chart-box">
+          <div class="card-title" id="stCredTitle"></div>
+          <div class="card-desc" id="stCredDesc"></div>
+          <div class="chart-canvas-wrap"><canvas id="chartCredential"></canvas></div>
+        </div>
+        <div class="card chart-box">
+          <div class="card-title" id="stRansomSplitTitle"></div>
+          <div class="card-desc" id="stRansomSplitDesc"></div>
+          <div class="chart-canvas-wrap"><canvas id="chartRansomSplit"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. مكتبة التهديدات ==================== -->
+    <section class="section" id="section-library">
+      <div class="page-head">
+        <h1><span id="libTitleIcon"></span> مكتبة التهديدات</h1>
+        <p>بطاقات تعريفية للتهديدات الأكثر شيوعاً: تعريف مبسط، مثال توعوي، علامات تحذيرية، وطرق الوقاية.</p>
+      </div>
+      <div class="threat-filter" id="threatFilter"></div>
+      <div class="threat-grid" id="threatGrid"></div>
+    </section>
+
+    <!-- ==================== 5. مختبر التصيد ==================== -->
+    <section class="section" id="section-lab">
+      <div class="page-head">
+        <h1><span id="labTitleIcon"></span> مختبر التصيد التفاعلي</h1>
+        <p>أمثلة تعليمية آمنة. اقرأ كل رسالة وحدّد: هل هي <b>مشبوهة</b> أم <b>سليمة</b>؟ ثم اطّلع على الشرح والعلامات التحذيرية.</p>
+      </div>
+
+      <div class="update-bar">
+        <span id="labIcon"></span>
+        <span>نتيجتك في المختبر: <b id="labScore">0</b> من <b id="labTotal">0</b></span>
+        <span class="spacer"></span>
+        <button class="btn" id="labReset"></button>
+      </div>
+
+      <div class="lab-grid" id="labGrid"></div>
+    </section>
+
+    <!-- ==================== 5.5 الهندسة الاجتماعية ==================== -->
+    <section class="section" id="section-osint">
+      <div class="page-head">
+        <h1><span id="seTitleIcon"></span> الهندسة الاجتماعية — مختبر التحليل</h1>
+        <p>تعريف شامل ومبادئها، ثم تجربة عملية: تحليل صورتين بقصة افتراضية، وتحدٍّ تفاعلي بصورة ثالثة.</p>
+      </div>
+
+      <!-- التعريف الشامل -->
+      <div class="card se-intro" id="seIntro"></div>
+
+      <!-- المبادئ الستة -->
+      <div class="card" style="margin-top:18px">
+        <div class="card-title" id="sePrinTitle"></div>
+        <div class="card-desc" id="sePrinDesc"></div>
+        <div class="se-principles" id="sePrinciples"></div>
+        <div class="se-chain" id="seChain"></div>
+      </div>
+
+      <!-- التجربة العملية: صورتان -->
+      <div class="se-cases-head">
+        <h2 id="seCasesTitle"></h2>
+        <p id="seCasesDesc"></p>
+      </div>
+      <div class="se-cases" id="seCases"></div>
+
+      <!-- التحدي التفاعلي -->
+      <div class="card se-challenge" id="seChallenge"></div>
+    </section>
+
+    <!-- ==================== 6. الاختبارات ==================== -->
+    <section class="section" id="section-quiz">
+      <div class="page-head">
+        <h1><span id="quizTitleIcon"></span> اختبارات التوعية</h1>
+        <p>أسئلة اختيار من متعدد. تظهر النتيجة والتفسير بعد كل إجابة، ويمكنك إعادة الاختبار في أي وقت.</p>
+      </div>
+
+      <div class="quiz-wrap" id="quizWrap">
+        <div id="quizPlay">
+          <div class="quiz-progress">
+            <div class="quiz-bar"><div class="quiz-bar-fill" id="quizFill"></div></div>
+            <span class="quiz-count" id="quizCount"></span>
+          </div>
+          <div class="card quiz-card">
+            <div class="quiz-q" id="quizQ"></div>
+            <div class="quiz-options" id="quizOptions"></div>
+            <div class="quiz-explain" id="quizExplain"></div>
+            <div class="quiz-foot">
+              <span class="quiz-count" id="quizScoreLive"></span>
+              <button class="btn btn-primary hidden" id="quizNext"></button>
+            </div>
+          </div>
+        </div>
+
+        <div id="quizResult" class="hidden">
+          <div class="card">
+            <div class="quiz-result">
+              <div class="score-circle" id="scoreCircle" style="--pct:0">
+                <div class="score-num" id="scoreNum"></div>
+              </div>
+              <h3 id="resultTitle"></h3>
+              <p id="resultMsg"></p>
+              <button class="btn btn-primary" id="quizRestart"></button>
+              <div class="quiz-review" id="quizReview"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 7. ركن التوعية ==================== -->
+    <section class="section" id="section-awareness">
+      <div class="page-head">
+        <h1><span id="awTitleIcon"></span> ركن التوعية</h1>
+        <p>نصائح عملية لحماية حساباتك وأجهزتك، ورسائل قصيرة قابلة للعرض على شاشة كبيرة في الملتقى.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:26px">
+        <div class="card-title" id="slideTitle"></div>
+        <div class="card-desc" id="slideDesc"></div>
+        <div class="slide-msg" id="slideMsg"></div>
+        <div class="slide-nav">
+          <button class="btn-icon" id="slidePrev"></button>
+          <div class="slide-dots" id="slideDots"></div>
+          <button class="btn-icon" id="slideNext"></button>
+        </div>
+      </div>
+
+      <div class="awareness-grid" id="awarenessGrid"></div>
+    </section>
+
+    <!-- ==================== 9. جرب بنفسك ==================== -->
+    <section class="section" id="section-try">
+      <div class="page-head">
+        <h1><span id="tryTitleIcon"></span> جرّب بنفسك — أدوات تفاعلية</h1>
+        <p>ثلاث أدوات محلية بالكامل: <b>افحص أي رابط</b> قبل الضغط عليه، <b>اختبر قوة كلمة مرورك</b>، و<b>حدّد موقعك</b> ليرتّب لك أخطر التهديدات عليك. كل التحليل يجري على جهازك ولا يُرسل أي شيء لأي مكان.</p>
+      </div>
+
+      <div class="try-tabs" id="tryTabs">
+        <button class="chip active" data-tool="link">افحص رابطاً</button>
+        <button class="chip" data-tool="pass">قوة كلمة المرور</button>
+        <button class="chip" data-tool="who">أخطر التهديدات عليّ</button>
+      </div>
+
+      <!-- ---------- 1. فحص الروابط ---------- -->
+      <div class="try-panel" id="tryPanel-link">
+        <div class="card try-card">
+          <div class="card-title"><span id="linkToolIcon"></span> فحص الروابط المشبوهة</div>
+          <div class="card-desc">الصق أي رابط في الحقل التالي. الأداء يفحص البنية فقط (بدون فتح الرابط) ويشرح لك علامات الخطر التي قد لا تلاحظها.</div>
+          <div class="try-input-row">
+            <input type="text" id="linkInput" class="try-input" placeholder="مثال: http://verify-account-9921.com/login.php?user=1" autocomplete="off" spellcheck="false" dir="ltr">
+            <button class="btn btn-primary" id="linkCheckBtn">افحص الرابط</button>
+          </div>
+          <div class="try-samples">
+            <span class="try-samples-label">أمثلة جاهزة للتجربة:</span>
+            <button class="chip" data-sample="http://sama-gov.com.sa-support.verify-9921.com/login">رابط تصيّد</button>
+            <button class="chip" data-sample="https://www.nca.gov.sa">رابط سليم</button>
+            <button class="chip" data-sample="https://www.amaz0n-account-verify.com/r">رابط مشبوه</button>
+          </div>
+          <div id="linkResult" class="try-result hidden"></div>
+        </div>
+      </div>
+
+      <!-- ---------- 2. قوة كلمة المرور ---------- -->
+      <div class="try-panel hidden" id="tryPanel-pass">
+        <div class="card try-card">
+          <div class="card-title"><span id="passToolIcon"></span> اختبر قوة كلمة مرورك</div>
+          <div class="card-desc">اكتب أي كلمة تجربها. التحليل يجري محلياً على جهازك فقط — لا تُرسل لأي خادم ولا تُحفظ. الغرض تعليمي لتتعلّم كيف تُبنى كلمة قوية.</div>
+          <div class="try-input-row">
+            <input type="text" id="passInput" class="try-input" placeholder="اكتب كلمة مرور للتجربة…" autocomplete="off" spellcheck="false" dir="ltr">
+            <button class="btn" id="passToggleBtn" title="إظهار/إخفاء">👁</button>
+          </div>
+          <div class="pass-meter-wrap">
+            <div class="pass-meter"><div class="pass-meter-fill" id="passMeterFill"></div></div>
+            <span class="pass-meter-label" id="passMeterLabel">—</span>
+          </div>
+          <ul class="pass-rules" id="passRules"></ul>
+          <div class="pass-estimate" id="passEstimate"></div>
+        </div>
+      </div>
+
+      <!-- ---------- 3. أخطر التهديدات عليك ---------- -->
+      <div class="try-panel hidden" id="tryPanel-who">
+        <div class="card try-card">
+          <div class="card-title"><span id="whoToolIcon"></span> ما أخطر ما يهدّدك أنت؟</div>
+          <div class="card-desc">اختر فئتك أدناه، وسنعيد ترتيب مكتبة التهديدات لتعرض أولاً ما يخصّك أكثر، مع نصيحة سريعة لكل تهديد.</div>
+          <div class="who-choices" id="whoChoices">
+            <button class="chip" data-who="student">طالب / مهتم بالتقنية</button>
+            <button class="chip" data-who="bank">موظف بنك أو مؤسسة مالية</button>
+            <button class="chip" data-who="shop">صاحب متجر إلكتروني</button>
+            <button class="chip" data-who="employee">موظف عادي في شركة</button>
+          </div>
+          <div id="whoResult" class="hidden"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 9. المساعد الذكي ==================== -->
+    <section class="section" id="section-ai">
+      <div class="page-head">
+        <h1><span id="aiTitleIcon"></span> اركان — مساعد الأمن السيبراني</h1>
+        <p>مساعد ذكاء اصطناعي محلي (يعمل عبر Ollama على جهازك) متخصص في الأمن السيبراني والتصيّد. اسأله عن أي تهديد أو مصطلح في الموقع — يجيبك ويشرح. <b>كل الأسئلة والردود تبقى على جهازك، ولا تُرسل لأي خدمة خارجية.</b></p>
+      </div>
+
+      <div class="ai-status-bar" id="aiStatusBar">
+        <span class="ai-dot" id="aiDot"></span>
+        <span id="aiStatusText">جارٍ التحقق من الاتصال بـ Ollama…</span>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-messages" id="aiMessages">
+          <div class="ai-msg ai">
+            <div class="ai-msg-head"><span class="ai-avatar">🤖</span><b>اركان</b></div>
+            <div class="ai-msg-body">أهلاً! أنا اركان، مساعدك السيبراني. اسألني عن التصيّد، برمجيات الفدية، الهندسة الاجتماعية، أو أي مصطلح في هذا الموقع — وسأشرح لك بأسلوب مبسّط.</div>
+          </div>
+        </div>
+
+        <div class="ai-suggestions" id="aiSuggestions">
+          <button class="chip" data-q="ما هو التصيد الإلكتروني؟">شنو هو التصيد؟</button>
+          <button class="chip" data-q="كيف أحمي حسابي البنكي؟">كيف أحمي حسابي؟</button>
+          <button class="chip" data-q="ما هي برمجيات الفدية؟">شنو برمجيات الفدية؟</button>
+          <button class="chip" data-q="كيف أتعرّف على الرسائل المشبوهة؟">كيف أكتشف الرسالة المزيّفة؟</button>
+        </div>
+
+        <div class="ai-input-row">
+          <input type="text" id="aiInput" class="try-input" placeholder="اكتب سؤالك هنا…" autocomplete="off">
+          <button class="btn btn-primary" id="aiSendBtn">إرسال</button>
+          <button class="btn" id="aiClearBtn" title="محادثة جديدة">محادثة جديدة</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 11. عن الموقع ==================== -->
+    <section class="section" id="section-about">
+      <div class="page-head">
+        <h1><span id="aboutTitleIcon"></span> عن الموقع والفريق</h1>
+        <p>مشروع تعليمي توعوي عن الأمن السيبراني — للعرض في الملتقيات والمدارس.</p>
+      </div>
+
+      <div class="card try-card">
+        <div class="card-title"><span id="aboutBodyIcon"></span> نبذة عن المشروع</div>
+        <div class="card-desc" style="white-space:pre-wrap" id="aboutSiteBody"></div>
+        <div class="about-actions">
+          <button class="about-edit-btn" id="siteAboutEditBtn">✏️ تعديل المحتوى</button>
+          <button class="about-save hidden" id="siteAboutSaveBtn">💾 حفظ</button>
+          <button class="about-edit-btn hidden" id="siteAboutCancelBtn">إلغاء</button>
+        </div>
+        <div class="about-hint">💡 المحتوى يُحفظ في هذا المتصفح (localStorage) — يقدر المضيف يعدّله بحرية.</div>
+      </div>
+
+      <div class="card try-card" style="margin-top:16px">
+        <div class="card-title"><span id="aboutTeamIcon"></span> فريق العمل</div>
+        <div class="card-desc" style="white-space:pre-wrap" id="aboutSiteTeam"></div>
+      </div>
+
+      <div class="card try-card" style="margin-top:16px">
+        <div class="card-title"><span id="aboutImgsIcon"></span> الصور</div>
+        <div class="about-images" id="siteAboutImages"></div>
+        <button class="about-img-add" id="siteAboutImgAdd" title="إضافة صورة">＋</button>
+        <input type="file" id="siteAboutImgInput" accept="image/*" multiple hidden>
+        <div class="about-hint">💡 الصور تُحفظ في هذا المتصفح (localStorage).</div>
+      </div>
+    </section>
+
+    <!-- ==================== 10. المصادر ==================== -->
+    <section class="section" id="section-sources">
+      <div class="page-head">
+        <h1><span id="srcTitleIcon"></span> المصادر والجهات الرسمية</h1>
+        <p>روابط إلى الجهات الرسمية والمصادر الموثوقة المستخدمة في بناء محتوى هذا المرصد.</p>
+      </div>
+
+      <div class="update-bar" id="srcUpdateBar"></div>
+      <div class="source-list" id="sourceList"></div>
+
+      <div class="card" style="margin-top:24px">
+        <div class="card-title" id="discTitle"></div>
+        <div class="card-desc" id="discBody"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ============ التذييل ============ -->
+<footer class="footer">
+  <span id="footNote"></span>
+  <span id="footCredit" style="color:var(--text-muted)"></span>
+  <span class="spacer"></span>
+  <span id="footUpdate"></span>
+</footer>
+
+<!-- ============ شريط وضع العرض ============ -->
+<div class="pres-hud hidden" id="presHud">
+  <span class="pres-label">وضع العرض التقديمي</span>
+  <button id="presUp" title="إلى الأعلى"></button>
+  <button id="presPrev" title="القسم السابق"></button>
+  <button id="presHome" title="الرئيسية"></button>
+  <button id="presNext" title="القسم التالي"></button>
+  <button id="presDown" title="إلى الأسفل"></button>
+  <button id="presExit" title="خروج"></button>
+</div>
+
+<!-- ============ مبدّل الثيم ============ -->
+<div class="theme-switcher" id="themeSwitcher">
+  <button class="theme-fab" id="themeFab" title="تغيير المظهر والألوان"></button>
+  <div class="theme-panel" id="themePanel">
+    <div class="theme-panel-title"><span id="themeTitleIco"></span><span>اختر المظهر</span></div>
+    <div class="theme-grid">
+      <button class="theme-opt active" data-t="dark"><span>داكن</span></button>
+      <button class="theme-opt" data-t="light"><span>فاتح</span></button>
+      <button class="theme-opt" data-t="violet"><span>بنفسجي</span></button>
+      <button class="theme-opt" data-t="matrix"><span>مصفوفة</span></button>
+      <button class="theme-opt" data-t="crimson"><span>عنابي</span></button>
+      <button class="theme-opt" data-t="ocean"><span>محيط</span></button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/jsvectormap.min.js"></script>
+<script src="assets/world.js"></script>
+<script src="assets/أيقونات.js"></script>
+<script src="assets/بيانات.js"></script>
+<script src="assets/بيانات-حقيقية.js"></script>
+<script src="assets/بيانات-هندسة.js"></script>
+<script src="assets/منطق.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
